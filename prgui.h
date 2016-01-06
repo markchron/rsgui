@@ -35,6 +35,8 @@ private:
     void updateMenus();
     void switchLayoutDirection();
 
+    void setMainWindowSize();
+
     Ui::PRGUI *ui;
 
     QMenu   *fileMenu;

@@ -13,11 +13,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        prgui.cpp
+        prgui.cpp \
+    resprodialog.cpp
 
-HEADERS  += prgui.h
+HEADERS  += prgui.h \
+    resprodialog.h
 
-FORMS    += prgui.ui
+FORMS    += prgui.ui \
+    resprodialog.ui
 
 RESOURCES += prgui.qrc
 
