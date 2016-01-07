@@ -2,8 +2,14 @@
 #include "ui_prgui.h"
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QPushButton>
 #include <QDesktopWidget>
+#include <QCloseEvent>
+#include <QTextStream>
+
 #include "resprodialog.h"
+#include "gensetdialog.h"
+
 
 PRGUI::PRGUI(QWidget *parent) :
     QMainWindow(parent),
@@ -11,11 +17,15 @@ PRGUI::PRGUI(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowFlags(Qt::Window);
-    this->setWindowTitle(tr("Builder"));
+//    this->setWindowTitle(tr("Builder"));
     this->setUnifiedTitleAndToolBarOnMac(true);
     this->setMainWindowSize();
 
-    _exist_file = false;
+    _modified_file = false;
+    _saved_file = true;
+    _curFileName = tr("PRGUINew.dat");
+    this->setWindowTitle(_curFileName);
+
 
     createActions();
     createMenus();
@@ -24,6 +34,8 @@ PRGUI::PRGUI(QWidget *parent) :
     createButtons();
 
     updateMenus();
+
+    setKeywordMap();
 }
 
 PRGUI::~PRGUI()
@@ -35,58 +47,166 @@ void PRGUI:: showResWindow(){
    // QMessageBox::warning(this, tr("Warning"), tr("showResWindow"), QMessageBox::Yes);
 //    QDialog *dialog = new QDialog(this);
     ResProDialog *dialog = new ResProDialog(this);
-    // dialog pointer is released while close MainWindow,
-    // but it will be released once the dialog is closed by the following command
-//    dialog->setAttribute(Qt::WA_DeleteOnClose);
-//    dialog->setWindowTitle("Reservoir property");
-//    dialog->setGeometry(QRect(50,50, 0.615*width(), 0.385*height()));
     dialog->show();
 }
 
 void PRGUI:: newFile(){
+    gui_do_file_SaveOrNot();
 
+    GenSetDialog * mdialog = new GenSetDialog;
+    if( mdialog->exec() == QDialog::Accepted) {
+      saveGeneralSetting(mdialog);
+      _modified_file = true;
+      _saved_file = false;
+      updateMenus();
+    }
+    delete mdialog;
 }
 void PRGUI::open(){
-    QString path = QFileDialog::getOpenFileName(this, tr("Open File"),tr("."), tr("DAT Files (*.dat);; Text Files (*.txt);; Raw Files (*.raw);; All Files (*.*)"));
-
-    if(!path.isEmpty()){
-        QFile file(path);
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QMessageBox :: warning(this, tr("Open File"), tr("Cannot open file:\n%1").arg(path));
-            return;
-        }
-        _exist_file = true;
-        QMessageBox::warning(this, tr("Warning"), tr("Open file"), QMessageBox::Yes);
-        file.close();
-    } else {
-        QMessageBox::warning(this, tr("Path"), tr("No file is selected."));
-    }
+    gui_do_file_Open();
     this->updateMenus();
 }
 void PRGUI::save(){
-    QString path = QFileDialog::getSaveFileName(this, tr("Save File"), ".", tr("DAT Files (*.dat);; All Files (*.*)"));
-
-    if (!path.isEmpty()){
-        QFile file(path);
-        if(!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QMessageBox::warning(this, tr("Write file"),
-                                 tr("Cannot save file:\n%1").arg(path));
-            return;
-        }
-        QMessageBox::warning(this, tr("Warning"), tr("save File"), QMessageBox::Yes);
-        file.close();
-    } else{
-        QMessageBox :: warning(this, tr("Path"),
-                               tr("No file is selected."));
-    }
+    gui_do_file_Save();
 }
 void PRGUI::saveAs(){
+    gui_do_file_SaveAs();
+}
+void PRGUI::closeEvent(QCloseEvent *event){
+    if(_modified_file){ // file is modified
+        QMessageBox box;
+        box.setWindowTitle(tr("Warning"));
+        box.setIcon(QMessageBox::Warning);
+        box.setText(tr("Save changes to ") + _curFileName + tr("?"));
+        box.setStandardButtons(QMessageBox::Yes | QMessageBox::No |QMessageBox::Cancel);
 
+        int ret = box.exec();
+        if(ret == QMessageBox :: Yes) {
+            gui_do_file_Save();
+            event->accept();
+        } else if (ret == QMessageBox::No){
+            event->accept();
+        } else if (ret == QMessageBox::Cancel) {
+            event->ignore();
+        }
+    } else {
+        event->accept();
+    }
+}
+
+
+
+
+std::string PRGUI::getStrKeyword(QString &key) const{
+    return getQstrKeyword(key).toStdString();
+}
+QString PRGUI::getQstrKeyword(QString &key) const{
+    if(keywordMap.contains(key)) {
+        QMap<QString, QString>::const_iterator it = keywordMap.find(key);
+        QString val = it.value()+tr(":\t");
+        return val;
+    } else {
+        return tr("#$ unknown");
+    }
+}
+void PRGUI::setKeywordMap(){
+    keywordMap.insert(tr("i_sim_type"), tr("model"));
+    keywordMap.insert("i_unit_type", "unit_index");
+    keywordMap.insert("i_porosity_type", "Por_index");
+}
+// return bool, since may be failed to save
+bool PRGUI::gui_saveFile(const QString &fileName){
+    QFile file(fileName);
+    if(!file.open(QFile::WriteOnly | QFile::Text)) {
+        QMessageBox::warning(this, tr("Save As"),
+                             tr("Cannot save file %1:\n %2").arg(fileName).arg(file.errorString())
+                             );
+        return false;
+    }
+    QTextStream out(&file);
+
+    out << getQstrKeyword(tr("i_unit_type")) << i_unit_type <<'\n';
+    out << getQstrKeyword(tr("i_sim_type")).toUtf8() <<  i_sim_type <<"\n";
+    out << getQstrKeyword(tr("i_porosity_type")) << i_porosity_type <<"\n";
+
+    _saved_file = true;
+    _modified_file = false;
+    _curFileName = QFileInfo(fileName).canonicalFilePath(); //获得文件的标准路径
+    setWindowTitle(_curFileName);
+    return true;
+}
+void PRGUI::gui_do_file_Open(){
+    gui_do_file_SaveOrNot();
+    QString fileName = QFileDialog::getOpenFileName(this,
+                        tr("Open File"),
+                        tr("."),
+                        tr("DAT Files (*.dat);; "
+                        "Text Files (*.txt);; "
+                         "Raw Files (*.raw);; "
+                         "All Files (*.*)"));
+    if(!fileName.isEmpty()){
+        gui_do_file_Load(fileName);
+    }
+}
+bool PRGUI:: gui_LoadFile(){
+    //todo
+    return true;
+}
+
+bool PRGUI:: gui_do_file_Load(const QString &fileName){
+    QFile file(fileName);
+    if(!file.open(QFile::ReadOnly | QFile::Text)){
+        QMessageBox::warning(this,
+                             tr("Open File"),
+                             tr("Can not open file %1:\n %2.").arg(fileName).arg(file.errorString())
+                             );
+        return false;
+    }
+    _curFileName=QFileInfo(fileName).canonicalFilePath();
+    setWindowTitle(_curFileName);
+
+    return gui_LoadFile();
+}
+
+void PRGUI::gui_do_file_Save(){
+    if(_saved_file){
+        gui_saveFile(_curFileName);
+    } else {
+        gui_do_file_SaveAs();
+    }
+}
+void PRGUI::gui_do_file_SaveAs(){
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                         tr("Save As"),
+                                         ".",
+                                         tr("DAT Files (*.dat);; All Files (*.*)")
+                                         );
+    if(!fileName.isEmpty()) {
+        gui_saveFile(fileName);
+    }
+}
+void PRGUI::gui_do_file_SaveOrNot(){
+    if(_modified_file){ // file is modified
+        QMessageBox box;
+        box.setWindowTitle(tr("Warning"));
+        box.setIcon(QMessageBox::Warning);
+        box.setText(tr("Save changes to ") + _curFileName + tr("?"));
+        box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+
+        if(box.exec() == QMessageBox :: Yes)
+            gui_do_file_Save();
+    }
+}
+
+void PRGUI::saveGeneralSetting(GenSetDialog *dialog){
+    i_sim_type       = dialog->getSimType();
+    i_unit_type      = dialog->getUnitType();
+    i_porosity_type  = dialog->getPorosityType();
+    i_start_day      = dialog->getStartDay();
 }
 
 void PRGUI::updateMenus(){
-    saveAct->setEnabled(_exist_file);
-    saveAsAct->setEnabled(_exist_file);
+    //todo
 }
 
 void PRGUI::createMenus(){
@@ -143,13 +263,7 @@ void PRGUI:: createButtons(){
     btspecify->setText("specify property");
     connect(btspecify, SIGNAL(clicked(bool)), this, SLOT(showResWindow()));
 }
-void PRGUI::switchLayoutDirection()
-{
-    if (layoutDirection() == Qt::LeftToRight)
-        qApp->setLayoutDirection(Qt::RightToLeft);
-    else
-        qApp->setLayoutDirection(Qt::LeftToRight);
-}
+
 
 void PRGUI::setMainWindowSize(){
     QSize availableSize = qApp->desktop()->availableGeometry().size();
@@ -164,5 +278,11 @@ void PRGUI::setMainWindowSize(){
                       );
 
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-
+}
+void PRGUI::switchLayoutDirection()
+{
+    if (layoutDirection() == Qt::LeftToRight)
+        qApp->setLayoutDirection(Qt::RightToLeft);
+    else
+        qApp->setLayoutDirection(Qt::LeftToRight);
 }

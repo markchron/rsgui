@@ -2,10 +2,15 @@
 #define PRGUI_H
 
 #include <QMainWindow>
-#include <QPushButton>
-
+#include <QMap>
+class QPushButton;
 class QAction;
 class QMenu;
+class QDialog;
+class GenSetDialog;
+class QCloseEvent;
+class QTextStream;
+class QString;
 
 namespace Ui {
 class PRGUI;
@@ -24,17 +29,29 @@ private slots:
     void open();
     void save();
     void saveAs();
+    void closeEvent(QCloseEvent* event);
 
     void showResWindow();
 private:
+    std::string getStrKeyword(QString &key)const;
+    QString getQstrKeyword(QString & key)const;
+    void setKeywordMap();
+
+    bool gui_saveFile(const QString &fileName);
+    void gui_do_file_Open();
+    bool gui_LoadFile();
+    bool gui_do_file_Load(const QString &fileName);
+    void gui_do_file_Save();
+    void gui_do_file_SaveAs();
+    void gui_do_file_SaveOrNot();
+    void saveGeneralSetting(GenSetDialog * dialog);
+    void updateMenus();
     void createMenus();
     void createActions();
+    void createStatusBar();
     void createToolBars();
     void createButtons();
-    void createStatusBar();
-    void updateMenus();
     void switchLayoutDirection();
-
     void setMainWindowSize();
 
     Ui::PRGUI *ui;
@@ -51,7 +68,11 @@ private:
 
     QPushButton *btspecify;
 
-    bool _exist_file;
+    bool _modified_file;
+    bool _saved_file;
+    QString _curFileName;
+    int i_sim_type, i_unit_type, i_porosity_type, i_start_day;
+    QMap<QString, QString> keywordMap;
 };
 
 #endif // PRGUI_H
