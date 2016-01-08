@@ -41,7 +41,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="newAct">
    <property name="icon">
-    <iconset resource="prgui.qrc">
+    <iconset>
      <normaloff>:/images/dat-new</normaloff>:/images/dat-new</iconset>
    </property>
    <property name="text">
@@ -53,8 +53,6 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="prgui.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

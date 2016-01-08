@@ -6,6 +6,8 @@
 #include <QDesktopWidget>
 #include <QCloseEvent>
 #include <QTextStream>
+#include <QVBoxLayout>
+
 
 #include "resprodialog.h"
 #include "gensetdialog.h"
@@ -26,21 +28,23 @@ PRGUI::PRGUI(QWidget *parent) :
     _curFileName = tr("PRGUINew.dat");
     this->setWindowTitle(_curFileName);
 
-
-    createActions();
-    createMenus();
-    createToolBars();
-    createStatusBar();
-    createButtons();
-
-    updateMenus();
-
     setKeywordMap();
+
+    designWindow();
+
+
 }
 
 PRGUI::~PRGUI()
 {
     delete ui;
+}
+void PRGUI:: showCartesianGridDialog(){
+    CartesianGridDialog * mdialog = new CartesianGridDialog;
+    if( mdialog->exec() == QDialog::Accepted) {
+        gui_gen_GridCartesian(mdialog);
+    }
+    delete(mdialog);
 }
 
 void PRGUI:: showResWindow(){
@@ -114,6 +118,10 @@ void PRGUI::setKeywordMap(){
     keywordMap.insert("i_unit_type", "unit_index");
     keywordMap.insert("i_porosity_type", "Por_index");
 }
+void PRGUI::setCustmQuery(){
+    custmQueryVector<<"I/O control" <<"Reservoir" <<"PVT" <<"Rock-Fluid"<<"Numerical" <<"Initialize";
+}
+
 // return bool, since may be failed to save
 bool PRGUI::gui_saveFile(const QString &fileName){
     QFile file(fileName);
@@ -197,6 +205,10 @@ void PRGUI::gui_do_file_SaveOrNot(){
             gui_do_file_Save();
     }
 }
+void PRGUI::gui_gen_GridCartesian(CartesianGridDialog * dialog){
+    i_grid_dim[0] = dialog->getNi();
+    return;
+}
 
 void PRGUI::saveGeneralSetting(GenSetDialog *dialog){
     i_sim_type       = dialog->getSimType();
@@ -205,8 +217,49 @@ void PRGUI::saveGeneralSetting(GenSetDialog *dialog){
     i_start_day      = dialog->getStartDay();
 }
 
+void PRGUI::designWindow(){
+    createActions();
+    createMenus();
+    createToolBars();
+    createStatusBar();
+    createDockWindows();
+    createButtons();
+    updateMenus();
+}
+
 void PRGUI::updateMenus(){
     //todo
+}
+
+
+void PRGUI::createDockWindows(){
+    setCustmQuery();
+/*
+    QDockWidget * dock = new QDockWidget(tr("Custom Process"), this);
+    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+
+    QVBoxLayout * slotVLyt = new QVBoxLayout(ui->custmScroll);
+    QCommandLinkButton * slotBts[5];
+    for(int i=0; i<5 && i<custmQueryVector.size(); ++i) {
+        slotBts[i]->setText(custmQueryVector.at(i));
+        ui->custmScroll->layout()->addWidget(slotBts[i]);
+    }
+    dock->setLayout(slotVLyt);
+    addDockWidget(Qt::LeftDockWidgetArea, dock);
+    viewMenu->addAction(dock->toggleViewAction());
+    */
+
+    QDockWidget *dock = new QDockWidget(tr("Process"), this);
+    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+   // custmList = new QListWidget;
+
+    slotBts = new QCommandLinkButton(dock);
+    slotBts->setText(custmQueryVector.at(1));
+    slotBts->setMenu(resrMenu);
+    dock->setWidget(slotBts);
+//    dock->setWidget(customerList);
+    addDockWidget(Qt::LeftDockWidgetArea, dock);
+    viewMenu->addAction(dock->toggleViewAction());
 }
 
 void PRGUI::createMenus(){
@@ -216,8 +269,17 @@ void PRGUI::createMenus(){
     fileMenu->addAction(saveAct);
     fileMenu->addAction(saveAsAct);
     fileMenu->addSeparator();
-
     fileMenu->addAction(exitAct);
+
+    viewMenu = menuBar()->addMenu(tr("&View"));
+
+    menuBar()->addSeparator();
+    resrMenu = menuBar()->addMenu("Reservoir");
+    resrMenu->addAction(createGridCartAct);
+
+    menuBar()->addSeparator();
+    helpMenu = menuBar()->addMenu(tr("&Help"));
+
 }
 
 void PRGUI::createActions(){
@@ -245,6 +307,11 @@ void PRGUI::createActions(){
     exitAct->setShortcut(QKeySequence::Quit);
     exitAct->setStatusTip(tr("Exit the application"));
     connect(exitAct, SIGNAL(triggered(bool)), qApp, SLOT(closeAllWindows()));
+
+
+    createGridCartAct = new QAction(tr("create Grid Cartesian"), this);
+    createGridCartAct->setStatusTip(tr("Create structure Cartesian grid or cylindrical grid"));
+    connect(createGridCartAct, SIGNAL(triggered(bool)), this, SLOT(showCartesianGridDialog()));
 }
 void PRGUI::createStatusBar(){
     statusBar()->showMessage(tr("Ready"));
@@ -255,6 +322,9 @@ void PRGUI::createToolBars()
     fileToolBar->addAction(newAct);
     fileToolBar->addAction(openAct);
     fileToolBar->addAction(saveAct);
+
+   // modeToolBar = addToolBar(tr("mode"));
+
 }
 void PRGUI:: createButtons(){
     btspecify = new QPushButton(this);

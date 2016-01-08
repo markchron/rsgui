@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = prgui
 TEMPLATE = app
@@ -15,15 +15,20 @@ TEMPLATE = app
 SOURCES += main.cpp\
         prgui.cpp \
     resprodialog.cpp \
-    gensetdialog.cpp
+    gensetdialog.cpp \
+    cartesiangriddialog.cpp \
+    qcustomplot.cpp
 
 HEADERS  += prgui.h \
     resprodialog.h \
     gensetdialog.h \
-    envset.h
+    envset.h \
+    cartesiangriddialog.h \
+    qcustomplot.h
 
 FORMS    += prgui.ui \
-    resprodialog.ui
+    resprodialog.ui \
+    cartesiangriddialog.ui
 
 RESOURCES += prgui.qrc
 
