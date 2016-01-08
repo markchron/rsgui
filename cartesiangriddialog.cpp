@@ -6,10 +6,16 @@ CartesianGridDialog::CartesianGridDialog(QWidget *parent) :
     ui(new Ui::CartesianGridDialog)
 {
     this->setWindowTitle(tr("Create Structure Grid"));
-
-    designDialog();
-
     ui->setupUi(this);
+
+    QGridLayout * layout = new QGridLayout(this);
+    layout->addWidget(ui->gridTypeGBox,0,0,1,1);
+    layout->addWidget(ui->kdirGBox,0,1,1,1);
+    layout->addWidget(ui->gridNumGBox,1,0,1,-1);
+    layout->addWidget(ui->gridOriginGBox,2,0,1,-1);
+
+    this->setLayout(layout);
+
     int nwidth = 380;
     int nheight = 450;
     if(parent != NULL){
@@ -26,21 +32,6 @@ CartesianGridDialog::~CartesianGridDialog()
     delete ui;
 }
 
-void CartesianGridDialog::designDialog(){
-    QHBoxLayout * topHLay = new QHBoxLayout;
-    topHLay->addWidget(ui->gridTypeGBox);
-    topHLay->addStretch();
-    topHLay->addWidget(ui->kdirGBox);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addLayout(topHLay);
-    mainLayout->addLayout(ui->gridNumHLay);
-    mainLayout->addLayout(ui->gridOriginHLay);
-    mainLayout->addLayout(ui->gridStepHLay);
-
-    mainLayout->addWidget(ui->buttonBox);
-    setLayout(mainLayout);
-}
 int CartesianGridDialog::getNi()const{
     return ui->niLEdt->text().toInt();
 }

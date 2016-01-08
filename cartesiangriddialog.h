@@ -16,7 +16,7 @@ public:
     ~CartesianGridDialog();
     int getNi()const;
 private:
-    void designDialog();
+
     Ui::CartesianGridDialog *ui;
 };
 

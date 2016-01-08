@@ -11,7 +11,7 @@
 
 #include "resprodialog.h"
 #include "gensetdialog.h"
-
+#include "qcustomplot.h"
 
 PRGUI::PRGUI(QWidget *parent) :
     QMainWindow(parent),
@@ -44,7 +44,7 @@ void PRGUI:: showCartesianGridDialog(){
     if( mdialog->exec() == QDialog::Accepted) {
         gui_gen_GridCartesian(mdialog);
     }
-    delete(mdialog);
+    delete mdialog;
 }
 
 void PRGUI:: showResWindow(){
@@ -223,8 +223,17 @@ void PRGUI::designWindow(){
     createToolBars();
     createStatusBar();
     createDockWindows();
-    createButtons();
+
     updateMenus();
+
+//    QGridLayout * layout = new QGridLayout;
+//    layout->addWidget(leftQW, 0, 0, 1, 1);
+//    layout->addWidget(rightQW, 0, 1, -1, 1);
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->addWidget(leftQW);
+    layout->addWidget(rightQW);
+
+    centralWidget()->setLayout(layout);
 }
 
 void PRGUI::updateMenus(){
@@ -234,32 +243,47 @@ void PRGUI::updateMenus(){
 
 void PRGUI::createDockWindows(){
     setCustmQuery();
-/*
-    QDockWidget * dock = new QDockWidget(tr("Custom Process"), this);
-    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-    QVBoxLayout * slotVLyt = new QVBoxLayout(ui->custmScroll);
-    QCommandLinkButton * slotBts[5];
-    for(int i=0; i<5 && i<custmQueryVector.size(); ++i) {
-        slotBts[i]->setText(custmQueryVector.at(i));
-        ui->custmScroll->layout()->addWidget(slotBts[i]);
-    }
-    dock->setLayout(slotVLyt);
-    addDockWidget(Qt::LeftDockWidgetArea, dock);
-    viewMenu->addAction(dock->toggleViewAction());
-    */
+    leftQW = new QDockWidget (tr("Custom Process"), this);
+    leftQW->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    leftQW->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
+    leftQW->sizePolicy().setHorizontalStretch(2);
+    leftQW->setMaximumWidth(0.4*this->width());
+    //QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    //spLeft.setHorizontalStretch(1);
+    //leftQW->setSizePolicy(spLeft);
 
-    QDockWidget *dock = new QDockWidget(tr("Process"), this);
-    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-   // custmList = new QListWidget;
+    slotBts[0] = new QCommandLinkButton(custmQueryVector.at(1), this);
+    slotBts[0]->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
+    slotBts[0]->setMenu(resrMenu);
 
-    slotBts = new QCommandLinkButton(dock);
-    slotBts->setText(custmQueryVector.at(1));
-    slotBts->setMenu(resrMenu);
-    dock->setWidget(slotBts);
-//    dock->setWidget(customerList);
-    addDockWidget(Qt::LeftDockWidgetArea, dock);
-    viewMenu->addAction(dock->toggleViewAction());
+    slotBts[1] = new QCommandLinkButton(custmQueryVector.at(2), this);
+    slotBts[1]->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
+    slotBts[1]->setMenu(fileMenu);
+
+    rsrTree = new TreeView(leftQW);
+//    rsrTree->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy:: Fixed));
+
+    QVBoxLayout *slotVLyt = new QVBoxLayout;
+    slotVLyt->addWidget(slotBts[0]);
+    slotVLyt->addWidget(slotBts[1]);
+    slotVLyt->addWidget(rsrTree);
+
+    QWidget *widLayout = new QWidget;
+
+    widLayout->setLayout(slotVLyt);
+    leftQW->setWidget(widLayout);
+
+    addDockWidget(Qt::LeftDockWidgetArea, leftQW);
+    viewMenu->addAction(leftQW->toggleViewAction());
+
+    rightQW = new QTabWidget(this);
+    //rightQW = new QWidget (this);
+    rightQW->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
+    rightQW->sizePolicy().setHorizontalStretch(1);
+    rightQW->addTab(new QCustomPlot, tr("2D-plot"));
+    rightQW->addTab(new TreeView, tr("3D-display"));
+
 }
 
 void PRGUI::createMenus(){
@@ -275,7 +299,7 @@ void PRGUI::createMenus(){
 
     menuBar()->addSeparator();
     resrMenu = menuBar()->addMenu("Reservoir");
-    resrMenu->addAction(createGridCartAct);
+    resrMenu->addAction(genGridCartDiagAct);
 
     menuBar()->addSeparator();
     helpMenu = menuBar()->addMenu(tr("&Help"));
@@ -309,9 +333,9 @@ void PRGUI::createActions(){
     connect(exitAct, SIGNAL(triggered(bool)), qApp, SLOT(closeAllWindows()));
 
 
-    createGridCartAct = new QAction(tr("create Grid Cartesian"), this);
-    createGridCartAct->setStatusTip(tr("Create structure Cartesian grid or cylindrical grid"));
-    connect(createGridCartAct, SIGNAL(triggered(bool)), this, SLOT(showCartesianGridDialog()));
+    genGridCartDiagAct = new QAction(tr("create Grid Cartesian"), this);
+    genGridCartDiagAct->setStatusTip(tr("Create structure Cartesian grid or cylindrical grid"));
+    connect(genGridCartDiagAct, SIGNAL(triggered(bool)), this, SLOT(showCartesianGridDialog()));
 }
 void PRGUI::createStatusBar(){
     statusBar()->showMessage(tr("Ready"));

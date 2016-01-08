@@ -17,14 +17,16 @@ SOURCES += main.cpp\
     resprodialog.cpp \
     gensetdialog.cpp \
     cartesiangriddialog.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    treeview.cpp
 
 HEADERS  += prgui.h \
     resprodialog.h \
     gensetdialog.h \
     envset.h \
     cartesiangriddialog.h \
-    qcustomplot.h
+    qcustomplot.h \
+    treeview.h
 
 FORMS    += prgui.ui \
     resprodialog.ui \

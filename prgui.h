@@ -6,9 +6,11 @@
 #include <QMap>
 
 #include <QDockWidget>
+#include <QTabWidget>
 #include <QCommandLinkButton>
 #include <QListWidget>
 #include "cartesiangriddialog.h"
+#include "treeview.h"
 
 class QPushButton;
 class QAction;
@@ -71,6 +73,12 @@ private:
     void setMainWindowSize();
 
     Ui::PRGUI *ui;
+    QDockWidget * leftQW;
+    QTabWidget * rightQW;
+    QListWidget *custmList;
+    QCommandLinkButton *slotBts[2];
+    TreeView *rsrTree;
+
 
     QMenu   * fileMenu;
     QMenu   * viewMenu;
@@ -82,14 +90,14 @@ private:
     QAction *saveAct;
     QAction *saveAsAct;
     QAction *exitAct;
-    QAction *createGridCartAct;
+    QAction *genGridCartDiagAct;
 
     QToolBar *fileToolBar;
     QToolBar *modeToolBar;
 
     QPushButton *btspecify;
-    QListWidget *custmList;
-    QCommandLinkButton *slotBts;
+
+
 
 
     bool _modified_file;
