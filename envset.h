@@ -21,5 +21,16 @@ typedef enum{
     ENV_POROSITY_DUAL_POR_DUAL_PERM
 } envporositytype_et;
 
+typedef enum {
+    ENV_GRID_TYPE_CART,
+    ENV_GRID_TYPE_CYLINDRAL,
+    ENV_GRID_TYPE_CORNER
+} envgridtype_et;
+
+typedef enum {
+    ENV_GRID_KDIR_UP,
+    ENV_GRID_KDIR_DOWN
+} envgridkdir_et;
+
 #endif // ENVSET
 

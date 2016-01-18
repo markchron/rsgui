@@ -9,6 +9,7 @@
 #include <QTabWidget>
 #include <QCommandLinkButton>
 #include <QListWidget>
+#include <QString>
 #include "cartesiangriddialog.h"
 #include "treeview.h"
 
@@ -19,8 +20,6 @@ class QDialog;
 class GenSetDialog;
 class QCloseEvent;
 class QTextStream;
-class QString;
-
 namespace Ui {
 class PRGUI;
 }
@@ -72,6 +71,9 @@ private:
     void switchLayoutDirection();
     void setMainWindowSize();
 
+//    QString num2QStr(int n, int* arr)const;
+//    QString num2QStr(int n, double* arr) const;
+
     Ui::PRGUI *ui;
     QDockWidget * leftQW;
     QTabWidget * rightQW;
@@ -104,7 +106,11 @@ private:
     bool _saved_file;
     QString _curFileName;
     int i_sim_type, i_unit_type, i_porosity_type, i_start_day;
+
+    QString i_grid_type, i_grid_kdir;
     int i_grid_dim[3];
+    double d_grid_origin[3];
+    double d_grid_step[3];
 
     QMap<QString, QString> keywordMap;
     QVector<QString> custmQueryVector;

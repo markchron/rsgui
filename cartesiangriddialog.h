@@ -14,7 +14,20 @@ class CartesianGridDialog : public QDialog
 public:
     explicit CartesianGridDialog(QWidget *parent = 0);
     ~CartesianGridDialog();
+    QString getGridType()const;
+    QString getKdir()const;
+
     int getNi()const;
+    int getNj()const;
+    int getNk()const;
+
+    double getX0()const;
+    double getY0() const;
+    double getZ0() const;
+
+    double getStepX()const;
+    double getStepY()const;
+    double getStepZ()const;
 private:
 
     Ui::CartesianGridDialog *ui;

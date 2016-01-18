@@ -110,13 +110,25 @@ QString PRGUI::getQstrKeyword(QString &key) const{
         QString val = it.value()+tr(":\t");
         return val;
     } else {
-        return tr("#$ unknown");
+        return ( tr("#$ unknown ")%key );
     }
 }
 void PRGUI::setKeywordMap(){
     keywordMap.insert(tr("i_sim_type"), tr("model"));
     keywordMap.insert("i_unit_type", "unit_index");
     keywordMap.insert("i_porosity_type", "Por_index");
+
+    keywordMap.insert("i_grid_type", "grid");
+    //todo, to make sure the RadioButtons have same text
+    keywordMap.insert("Cartesian", "cart");
+    keywordMap.insert("Corner Points", "corner point");
+    keywordMap.insert("i_grid_kdir", "kdir");
+    keywordMap.insert("Up", "up");
+    keywordMap.insert("Down", "down");
+
+    keywordMap.insert("i_grid_dim", "extents");
+    keywordMap.insert("d_grid_origin", "origin");
+    keywordMap.insert("d_grid_step","cellsize");
 }
 void PRGUI::setCustmQuery(){
     custmQueryVector<<"I/O control" <<"Reservoir" <<"PVT" <<"Rock-Fluid"<<"Numerical" <<"Initialize";
@@ -136,6 +148,9 @@ bool PRGUI::gui_saveFile(const QString &fileName){
     out << getQstrKeyword(tr("i_unit_type")) << i_unit_type <<'\n';
     out << getQstrKeyword(tr("i_sim_type")).toUtf8() <<  i_sim_type <<"\n";
     out << getQstrKeyword(tr("i_porosity_type")) << i_porosity_type <<"\n";
+    out << getQstrKeyword(tr("i_grid_type")) << getQstrKeyword(i_grid_type) <<"\n";
+    out << getQstrKeyword(tr("i_grid_kdir")) << getQstrKeyword(i_grid_kdir) <<"\n";
+    out << getQstrKeyword(tr("i_grid_dim")) << i_grid_dim; //num2QStr(3, i_grid_dim)<<"\n";
 
     _saved_file = true;
     _modified_file = false;
@@ -207,6 +222,19 @@ void PRGUI::gui_do_file_SaveOrNot(){
 }
 void PRGUI::gui_gen_GridCartesian(CartesianGridDialog * dialog){
     i_grid_dim[0] = dialog->getNi();
+    i_grid_dim[1] = dialog->getNj();
+    i_grid_dim[2] = dialog->getNk();
+
+    d_grid_origin[0] = dialog->getX0();
+    d_grid_origin[1] = dialog->getY0();
+    d_grid_origin[2] = dialog->getZ0();
+
+    d_grid_step[0] = dialog->getStepX();
+    d_grid_step[1] = dialog->getStepY();
+    d_grid_step[2] = dialog->getStepZ();
+
+    i_grid_type = dialog->getGridType();
+    i_grid_kdir = dialog->getKdir();
     return;
 }
 
@@ -229,11 +257,18 @@ void PRGUI::designWindow(){
 //    QGridLayout * layout = new QGridLayout;
 //    layout->addWidget(leftQW, 0, 0, 1, 1);
 //    layout->addWidget(rightQW, 0, 1, -1, 1);
-    QHBoxLayout *layout = new QHBoxLayout;
-    layout->addWidget(leftQW);
-    layout->addWidget(rightQW);
+//    QHBoxLayout *layout = new QHBoxLayout;
+//    layout->addWidget(leftQW);
+//    layout->addWidget(rightQW);
 
-    centralWidget()->setLayout(layout);
+//    centralWidget()->setLayout(layout);
+
+    QSplitter * mainSplitter = new QSplitter(Qt::Horizontal);
+    mainSplitter->addWidget(leftQW);
+    mainSplitter->addWidget(rightQW);
+    mainSplitter->setStretchFactor(2,1);
+
+    setCentralWidget(mainSplitter);
 }
 
 void PRGUI::updateMenus(){
@@ -247,8 +282,7 @@ void PRGUI::createDockWindows(){
     leftQW = new QDockWidget (tr("Custom Process"), this);
     leftQW->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     leftQW->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
-    leftQW->sizePolicy().setHorizontalStretch(2);
-    leftQW->setMaximumWidth(0.4*this->width());
+    leftQW->setMaximumWidth(0.3*this->width());
     //QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
     //spLeft.setHorizontalStretch(1);
     //leftQW->setSizePolicy(spLeft);
@@ -280,7 +314,7 @@ void PRGUI::createDockWindows(){
     rightQW = new QTabWidget(this);
     //rightQW = new QWidget (this);
     rightQW->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
-    rightQW->sizePolicy().setHorizontalStretch(1);
+    //rightQW->sizePolicy().setHorizontalStretch(1);
     rightQW->addTab(new QCustomPlot, tr("2D-plot"));
     rightQW->addTab(new TreeView, tr("3D-display"));
 
@@ -380,3 +414,20 @@ void PRGUI::switchLayoutDirection()
     else
         qApp->setLayoutDirection(Qt::LeftToRight);
 }
+/*
+QString PRGUI::num2QStr(int n, int* arr){
+    QString rst = " ";
+    for(int i=0; i<n; i++){
+        rst+= QString::number(arr(i),10);
+    }
+
+    return rst;
+}
+QString PRGUI::num2QStr(int n, double* arr){
+    QString rst=" ";
+    for(int i=0; i<n; i++){
+        rst = rst + QString::number(arr(i),10) + tr("\t");
+    }
+    return rst;
+}
+*/

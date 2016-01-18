@@ -1,6 +1,6 @@
 #include "cartesiangriddialog.h"
 #include "ui_cartesiangriddialog.h"
-
+#include "envset.h"
 CartesianGridDialog::CartesianGridDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CartesianGridDialog)
@@ -8,16 +8,8 @@ CartesianGridDialog::CartesianGridDialog(QWidget *parent) :
     this->setWindowTitle(tr("Create Structure Grid"));
     ui->setupUi(this);
 
-    QGridLayout * layout = new QGridLayout(this);
-    layout->addWidget(ui->gridTypeGBox,0,0,1,1);
-    layout->addWidget(ui->kdirGBox,0,1,1,1);
-    layout->addWidget(ui->gridNumGBox,1,0,1,-1);
-    layout->addWidget(ui->gridOriginGBox,2,0,1,-1);
-
-    this->setLayout(layout);
-
-    int nwidth = 380;
-    int nheight = 450;
+    int nwidth = width();
+    int nheight = height();
     if(parent != NULL){
         setGeometry(parent->x() + parent->width()/2 - nwidth/2,
                     parent->y() + parent->width()/2 - nheight/2,
@@ -31,7 +23,42 @@ CartesianGridDialog::~CartesianGridDialog()
 {
     delete ui;
 }
-
-int CartesianGridDialog::getNi()const{
+QString CartesianGridDialog::getGridType()const{
+    if( ui->gridTypeCylindRBt_2->isChecked())
+        return ui->gridTypeCylindRBt_2->text();
+    else
+        return ui->gridTypeCartesianRBt->text();
+}
+QString CartesianGridDialog::getKdir()const{
+    if(ui->kUpDirRBt->isChecked()){
+        return ui->kUpDirRBt->text();
+    } else
+        return ui->kDownDirRBt->text();
+}
+int CartesianGridDialog::getNi()const {
     return ui->niLEdt->text().toInt();
+}
+int CartesianGridDialog::getNj()const{
+    return ui->njLEdt->text().toInt();
+}
+int CartesianGridDialog::getNk()const{
+    return ui->nkLEdt->text().toInt();
+}
+double CartesianGridDialog::getX0()const{
+    return ui->xOriginLEt->text().toDouble();
+}
+double CartesianGridDialog::getY0()const{
+    return ui->yOriginLEt->text().toDouble();
+}
+double CartesianGridDialog::getZ0()const{
+    return ui->zOriginLEt->text().toDouble();
+}
+double CartesianGridDialog::getStepX()const{
+    return ui->xStepLEt->text().toDouble();
+}
+double CartesianGridDialog::getStepY()const{
+    return ui->yStepLEt->text().toDouble();
+}
+double CartesianGridDialog::getStepZ()const{
+    return ui->zStepLEt->text().toDouble();
 }
