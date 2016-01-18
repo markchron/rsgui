@@ -98,6 +98,23 @@ void PRGUI::closeEvent(QCloseEvent *event){
     }
 }
 
+QString PRGUI:: getQstrNums(int n, int *array){
+    QString str;
+    QTextStream out(&str);
+    for(int i=0; i< n; ++i){
+        out << array[i]<<" ";
+    }
+    return str;
+}
+
+QString PRGUI:: getQstrNums(int n, double *array){
+    QString str;
+    QTextStream out(&str);
+    for(int i=0; i<n; ++i){
+        out << array[i]<<" ";
+    }
+    return str;
+}
 
 void PRGUI::saveNumsIntoTStream(QTextStream &out, int n, int* array){
     for (int i=0; i<n; i++){
@@ -164,9 +181,13 @@ bool PRGUI::gui_saveFile(const QString &fileName){
     out << getQstrKeyword(tr("i_porosity_type")) << i_porosity_type <<"\n";
     out << getQstrKeyword(tr("i_grid_type")) << getQstrKeyword(i_grid_type) <<"\n";
 //    out << getQstrKeyword(tr("i_grid_kdir")) << getQstrKeyword(i_grid_kdir) <<"\n";
-    out << getQstrKeyword(tr("i_grid_dim")) ; saveNumsIntoTStream(out, 3, i_grid_dim);
-    out << getQstrKeyword(tr("d_grid_origin")); saveNumsIntoTStream(out, 3, d_grid_origin);
-    out << getQstrKeyword(tr("d_grid_step")); saveNumsIntoTStream(out, 3, d_grid_step);
+
+    out << getQstrKeyword(tr("i_grid_dim")) << getQstrNums(3, i_grid_dim) <<"\n";
+    //out << getQstrKeyword(tr("i_grid_dim")) ; saveNumsIntoTStream(out, 3, i_grid_dim);
+    out << getQstrKeyword(tr("d_grid_origin"))<< getQstrNums(3, d_grid_origin)<<"\n";
+    //out << getQstrKeyword(tr("d_grid_origin")); saveNumsIntoTStream(out,3, d_grid_origin);
+    out << getQstrKeyword(tr("d_grid_step"))<< getQstrNums(3, d_grid_step)<<"\n";
+    //out << getQstrKeyword(tr("d_grid_step")); saveNumsIntoTStream(out, 3, d_grid_step);
 
     _saved_file = true;
     _modified_file = false;
