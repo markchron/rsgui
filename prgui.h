@@ -42,6 +42,8 @@ private slots:
     void showResWindow();
     void showCartesianGridDialog();
 private:
+    void saveNumsIntoTStream(QTextStream& out, int n, int* array);
+    void saveNumsIntoTStream(QTextStream &out, int n, double *array);
     std::string getStrKeyword(QString &key)const;
     QString getQstrKeyword(QString & key)const;
     void setKeywordMap();

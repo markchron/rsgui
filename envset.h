@@ -1,6 +1,8 @@
 #ifndef ENVSET
 #define ENVSET
 
+//int const ENV_INFINITE_SIZE = 128;
+
 typedef enum {
     ENV_SIM_BLACK_OIL,
     ENV_SIM_COMPOSITION,
