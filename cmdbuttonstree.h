@@ -10,8 +10,8 @@ class cmdButtonsTree : public QWidget
 public:
     explicit cmdButtonsTree(QWidget *parent = 0);
 
-    QPushButton * getButton(const int) const;
-    QPushButton * getButton(const QString& str)const;
+    QPushButton * getButton(const int i);
+    QPushButton * getButton(const QString& str);
 signals:
 
 public slots:
@@ -19,7 +19,7 @@ public slots:
 private:
     void setCustmQuery();
 
-    QPushButton * buttons[3];
+    QVector<QPushButton*> buttons;
     QVector<QString> custmQueryVector;
 };
 
