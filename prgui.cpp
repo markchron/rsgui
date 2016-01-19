@@ -161,9 +161,7 @@ void PRGUI::setKeywordMap(){
     keywordMap.insert("d_grid_origin", "origin");
     keywordMap.insert("d_grid_step","cellsize");
 }
-void PRGUI::setCustmQuery(){
-    custmQueryVector<<"I/O control" <<"Reservoir" <<"PVT" <<"Rock-Fluid"<<"Numerical" <<"Initialize";
-}
+
 
 // return bool, since may be failed to save
 bool PRGUI::gui_saveFile(const QString &fileName){
@@ -314,8 +312,6 @@ void PRGUI::updateMenus(){
 
 
 void PRGUI::createDockWindows(){
-    setCustmQuery();
-
     leftQW = new QDockWidget (tr("Custom Process"), this);
     leftQW->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     leftQW->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
@@ -323,7 +319,7 @@ void PRGUI::createDockWindows(){
     //QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
     //spLeft.setHorizontalStretch(1);
     //leftQW->setSizePolicy(spLeft);
-
+/*
     slotBts[0] = new QCommandLinkButton(custmQueryVector.at(1), this);
     slotBts[0]->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
     slotBts[0]->setMenu(resrMenu);
@@ -331,13 +327,20 @@ void PRGUI::createDockWindows(){
     slotBts[1] = new QCommandLinkButton(custmQueryVector.at(2), this);
     slotBts[1]->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
     slotBts[1]->setMenu(fileMenu);
+*/
+    slotBtsTree = new cmdButtonsTree(leftQW);
+    slotBtsTree->getButton("Reservoir")->setMenu(resrMenu);
+    slotBtsTree->getButton("PVT")->setMenu(fileMenu);
+
 
     rsrTree = new TreeView(leftQW);
 //    rsrTree->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy:: Fixed));
 
     QVBoxLayout *slotVLyt = new QVBoxLayout;
-    slotVLyt->addWidget(slotBts[0]);
+/*    slotVLyt->addWidget(slotBts[0]);
     slotVLyt->addWidget(slotBts[1]);
+*/
+    slotVLyt->addWidget(slotBtsTree);
     slotVLyt->addWidget(rsrTree);
 
     QWidget *widLayout = new QWidget;

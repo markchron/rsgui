@@ -1,6 +1,8 @@
 #include "cartesiangriddialog.h"
 #include "ui_cartesiangriddialog.h"
 #include "envset.h"
+#include <QPushButton>
+
 CartesianGridDialog::CartesianGridDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CartesianGridDialog)
@@ -17,6 +19,10 @@ CartesianGridDialog::CartesianGridDialog(QWidget *parent) :
     } else {
         resize(nwidth, nheight);
     }
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
+    connect(ui->niLEdt, SIGNAL(textChanged(const QString&)),
+            this, SLOT(enableOkButton(const QString&)) );
 }
 
 CartesianGridDialog::~CartesianGridDialog()
@@ -61,4 +67,8 @@ double CartesianGridDialog::getStepY()const{
 }
 double CartesianGridDialog::getStepZ()const{
     return ui->zStepLEt->text().toDouble();
+}
+
+void CartesianGridDialog::enableOkButton(const QString &text){
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!text.isEmpty());
 }

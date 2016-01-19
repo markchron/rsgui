@@ -28,6 +28,8 @@ public:
     double getStepX()const;
     double getStepY()const;
     double getStepZ()const;
+private slots:
+    void enableOkButton(const QString& text);
 private:
 
     Ui::CartesianGridDialog *ui;

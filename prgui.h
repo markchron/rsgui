@@ -7,11 +7,13 @@
 
 #include <QDockWidget>
 #include <QTabWidget>
-#include <QCommandLinkButton>
+//#include <QCommandLinkButton>
+
 #include <QListWidget>
 #include <QString>
 #include "cartesiangriddialog.h"
 #include "treeview.h"
+#include "cmdbuttonstree.h"
 
 class QPushButton;
 class QAction;
@@ -49,7 +51,7 @@ private:
     std::string getStrKeyword(QString &key)const;
     QString getQstrKeyword(QString & key)const;
     void setKeywordMap();
-    void setCustmQuery();
+
 
     bool gui_saveFile(const QString &fileName);
     void gui_do_file_Open();
@@ -82,7 +84,8 @@ private:
     QDockWidget * leftQW;
     QTabWidget * rightQW;
     QListWidget *custmList;
-    QCommandLinkButton *slotBts[2];
+//    QCommandLinkButton *slotBts[2];
+    cmdButtonsTree* slotBtsTree;
     TreeView *rsrTree;
 
 
@@ -117,7 +120,7 @@ private:
     double d_grid_step[3];
 
     QMap<QString, QString> keywordMap;
-    QVector<QString> custmQueryVector;
+
 };
 
 #endif // PRGUI_H

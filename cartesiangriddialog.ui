@@ -14,6 +14,9 @@
    <string>Dialog</string>
   </property>
   <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -29,7 +32,7 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>31</x>
@@ -190,9 +193,6 @@
         <widget class="QLineEdit" name="zOriginLEt"/>
        </item>
       </layout>
-      <zorder>layoutWidget_3</zorder>
-      <zorder>zOriginLEt</zorder>
-      <zorder>gridNumGBox</zorder>
      </widget>
     </item>
     <item row="3" column="0" colspan="2">
