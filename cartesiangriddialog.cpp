@@ -2,13 +2,20 @@
 #include "ui_cartesiangriddialog.h"
 #include "envset.h"
 #include <QPushButton>
+#include <QRegExp>
 
 CartesianGridDialog::CartesianGridDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::CartesianGridDialog)
+    QDialog(parent)
 {
-    this->setWindowTitle(tr("Create Structure Grid"));
-    ui->setupUi(this);
+    setupUi(this);
+    setWindowTitle(tr("Create Structure Grid"));
+    buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+    // making the dialog non-resizable by the user.
+    /* The layout then takes over the responsibiliyt for resizing,
+     * and resizes the dailog automatically when child widgets are shown or hidden,
+     * ensuring that the dialog is always displayed at its optimal size
+     */
+    layout()->setSizeConstraint(QLayout::SetFixedSize);
 
     int nwidth = width();
     int nheight = height();
@@ -19,56 +26,86 @@ CartesianGridDialog::CartesianGridDialog(QWidget *parent) :
     } else {
         resize(nwidth, nheight);
     }
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
+    /* //example
     connect(ui->niLEdt, SIGNAL(textChanged(const QString&)),
             this, SLOT(enableOkButton(const QString&)) );
+    */
+    QValidator *regNumValidor = new QIntValidator(1, 99999999, this);
+    niLEdt->setValidator(regNumValidor);
+    njLEdt->setValidator(regNumValidor);
+    nkLEdt->setValidator(regNumValidor);
+
+
+/*
+     * "." any character
+     * "\\d" A digit [0-9]
+     * "\\D" A non-digit [^0-9]
+     * "\\s" A whitespace [ \t\n\r\f]
+     * "\\S" A non-whitespace
+     * "\\w" A word character[_a-zA-Z0-9]
+     * "\\W" A non-word character
+*/
+
 }
 
 CartesianGridDialog::~CartesianGridDialog()
 {
-    delete ui;
+//    delete ui;
 }
 QString CartesianGridDialog::getGridType()const{
-    if( ui->gridTypeCylindRBt_2->isChecked())
-        return ui->gridTypeCylindRBt_2->text();
+    if( gridTypeCylindRBt_2->isChecked())
+        return gridTypeCylindRBt_2->text();
     else
-        return ui->gridTypeCartesianRBt->text();
+        return gridTypeCartesianRBt->text();
 }
 QString CartesianGridDialog::getKdir()const{
-    if(ui->kUpDirRBt->isChecked()){
-        return ui->kUpDirRBt->text();
+    if(kUpDirRBt->isChecked()){
+        return kUpDirRBt->text();
     } else
-        return ui->kDownDirRBt->text();
+        return kDownDirRBt->text();
 }
 int CartesianGridDialog::getNi()const {
-    return ui->niLEdt->text().toInt();
+    return niLEdt->text().toInt();
 }
 int CartesianGridDialog::getNj()const{
-    return ui->njLEdt->text().toInt();
+    return njLEdt->text().toInt();
 }
 int CartesianGridDialog::getNk()const{
-    return ui->nkLEdt->text().toInt();
+    return nkLEdt->text().toInt();
 }
 double CartesianGridDialog::getX0()const{
-    return ui->xOriginLEt->text().toDouble();
+    return xOriginLEt->text().toDouble();
 }
 double CartesianGridDialog::getY0()const{
-    return ui->yOriginLEt->text().toDouble();
+    return yOriginLEt->text().toDouble();
 }
 double CartesianGridDialog::getZ0()const{
-    return ui->zOriginLEt->text().toDouble();
+    return zOriginLEt->text().toDouble();
 }
 double CartesianGridDialog::getStepX()const{
-    return ui->xStepLEt->text().toDouble();
+    return xStepLEt->text().toDouble();
 }
 double CartesianGridDialog::getStepY()const{
-    return ui->yStepLEt->text().toDouble();
+    return yStepLEt->text().toDouble();
 }
 double CartesianGridDialog::getStepZ()const{
-    return ui->zStepLEt->text().toDouble();
+    return zStepLEt->text().toDouble();
 }
-
+/*
 void CartesianGridDialog::enableOkButton(const QString &text){
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!text.isEmpty());
+     buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!text.isEmpty());
+}
+*/
+void CartesianGridDialog::on_niLEdt_textChanged(){
+    buttonBox->button(QDialogButtonBox::Ok)
+            ->setEnabled(niLEdt->hasAcceptableInput());
+}
+void CartesianGridDialog::on_njLEdt_textChanged(){
+    buttonBox->button(QDialogButtonBox::Ok)
+            ->setEnabled(niLEdt->hasAcceptableInput());
+}
+void CartesianGridDialog::on_nkLEdt_textChanged(){
+    buttonBox->button(QDialogButtonBox::Ok)
+            ->setEnabled(niLEdt->hasAcceptableInput());
 }

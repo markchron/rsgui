@@ -2,12 +2,13 @@
 #define CARTESIANGRIDDIALOG_H
 
 #include <QDialog>
-
+#include "ui_cartesiangriddialog.h"
+/*
 namespace Ui {
 class CartesianGridDialog;
 }
-
-class CartesianGridDialog : public QDialog
+*/
+class CartesianGridDialog : public QDialog, public Ui::CartesianGridDialog
 {
     Q_OBJECT
 
@@ -29,10 +30,13 @@ public:
     double getStepY()const;
     double getStepZ()const;
 private slots:
-    void enableOkButton(const QString& text);
+//    void enableOkButton(const QString& text);
+    void on_niLEdt_textChanged();
+    void on_njLEdt_textChanged();
+    void on_nkLEdt_textChanged();
 private:
 
-    Ui::CartesianGridDialog *ui;
+//    Ui::CartesianGridDialog *ui;
 };
 
 #endif // CARTESIANGRIDDIALOG_H

@@ -330,6 +330,7 @@ void PRGUI::createDockWindows(){
 */
     slotBtsTree = new cmdButtonsTree(leftQW);
     slotBtsTree->getButton("Reservoir")->setMenu(resrMenu);
+
     slotBtsTree->getButton("PVT")->setMenu(fileMenu);
 
 
@@ -357,7 +358,6 @@ void PRGUI::createDockWindows(){
     //rightQW->sizePolicy().setHorizontalStretch(1);
     rightQW->addTab(new QCustomPlot, tr("2D-plot"));
     rightQW->addTab(new TreeView, tr("3D-display"));
-
 }
 
 void PRGUI::createMenus(){

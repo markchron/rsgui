@@ -6,236 +6,251 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>361</width>
-    <height>447</height>
+    <width>302</width>
+    <height>365</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>400</y>
-     <width>321</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>31</x>
-     <y>31</y>
-     <width>301</width>
-     <height>341</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="gridLayout_4">
-    <item row="0" column="0">
-     <widget class="QGroupBox" name="gridTypeGBox">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>2</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="title">
-       <string>Grid Type</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QRadioButton" name="gridTypeCartesianRBt">
-         <property name="text">
-          <string>Cartesian</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="gridTypeCylindRBt_2">
-         <property name="text">
-          <string>Corner Points</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QGroupBox" name="kdirGBox">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>1</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="title">
-       <string>K Direction</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QRadioButton" name="kUpDirRBt">
-         <property name="text">
-          <string>Up</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="kDownDirRBt">
-         <property name="text">
-          <string>Down</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QGroupBox" name="gridNumGBox">
-      <property name="title">
-       <string>Numbers of Grid Blocks</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="niLabel">
-         <property name="text">
-          <string>x direction</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="njLabel">
-         <property name="text">
-          <string>y direction</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="nkLabel">
-         <property name="text">
-          <string>z direction</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLineEdit" name="niLEdt">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="njLEdt"/>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLineEdit" name="nkLEdt"/>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="2">
-     <widget class="QGroupBox" name="gridOriginGBox">
-      <property name="title">
-       <string>Origin of Reservoir</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
-        <widget class="QLabel" name="xOriginLabel">
-         <property name="text">
-          <string>x direction</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="yOriginLabel">
-         <property name="text">
-          <string>y direction</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="zOrignLabel">
-         <property name="text">
-          <string>z direction</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLineEdit" name="xOriginLEt">
-         <property name="whatsThis">
-          <string extracomment="where x starts with"/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="yOriginLEt"/>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLineEdit" name="zOriginLEt"/>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="2">
-     <widget class="QGroupBox" name="gridStepGBox">
-      <property name="title">
-       <string>Widths of Grid Blocks</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="xStepLabel">
-         <property name="text">
-          <string>x direction</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="yStepLabel">
-         <property name="text">
-          <string>y direction</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="zStepLabel">
-         <property name="text">
-          <string>z direction</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLineEdit" name="xStepLEt"/>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="yStepLEt"/>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLineEdit" name="zStepLEt"/>
-       </item>
-      </layout>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <layout class="QGridLayout" name="gridLayout_4">
+     <item row="0" column="0">
+      <widget class="QGroupBox" name="gridTypeGBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>2</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>Grid Type</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QRadioButton" name="gridTypeCartesianRBt">
+          <property name="text">
+           <string>Cartesian</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="gridTypeCylindRBt_2">
+          <property name="text">
+           <string>Corner Points</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QGroupBox" name="kdirGBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>K Direction</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QRadioButton" name="kUpDirRBt">
+          <property name="text">
+           <string>Up</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="kDownDirRBt">
+          <property name="text">
+           <string>Down</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QGroupBox" name="gridNumGBox">
+       <property name="title">
+        <string>Numbers of Grid Blocks</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="niLabel">
+          <property name="text">
+           <string>x direction</string>
+          </property>
+          <property name="buddy">
+           <cstring>niLEdt</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="njLabel">
+          <property name="text">
+           <string>y direction</string>
+          </property>
+          <property name="buddy">
+           <cstring>njLEdt</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="nkLabel">
+          <property name="text">
+           <string>z direction</string>
+          </property>
+          <property name="buddy">
+           <cstring>nkLEdt</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLineEdit" name="niLEdt">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="njLEdt"/>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="nkLEdt"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="QGroupBox" name="gridOriginGBox">
+       <property name="title">
+        <string>Origin of Reservoir</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QLabel" name="xOriginLabel">
+          <property name="text">
+           <string>x direction</string>
+          </property>
+          <property name="buddy">
+           <cstring>xOriginLEt</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="yOriginLabel">
+          <property name="text">
+           <string>y direction</string>
+          </property>
+          <property name="buddy">
+           <cstring>yOriginLEt</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="zOrignLabel">
+          <property name="text">
+           <string>z direction</string>
+          </property>
+          <property name="buddy">
+           <cstring>zOriginLEt</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLineEdit" name="xOriginLEt">
+          <property name="whatsThis">
+           <string extracomment="where x starts with"/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="yOriginLEt"/>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="zOriginLEt"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QGroupBox" name="gridStepGBox">
+       <property name="title">
+        <string>Widths of Grid Blocks</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="xStepLabel">
+          <property name="text">
+           <string>x direction</string>
+          </property>
+          <property name="buddy">
+           <cstring>xStepLEt</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="yStepLabel">
+          <property name="text">
+           <string>y direction</string>
+          </property>
+          <property name="buddy">
+           <cstring>yStepLEt</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="zStepLabel">
+          <property name="text">
+           <string>z direction</string>
+          </property>
+          <property name="buddy">
+           <cstring>zStepLEt</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLineEdit" name="xStepLEt"/>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="yStepLEt"/>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="zStepLEt"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <tabstops>
   <tabstop>gridTypeCartesianRBt</tabstop>
