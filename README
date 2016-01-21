@@ -1,0 +1,12 @@
+
+--------------------------
+   Reference
+--------------------------
+2D plot:
+
+http://www.qcustomplot.com/index.php/introduction
+Qt Reference Documentation
+http://qt.apidoc.info/5.0.2/qtdoc-online/
+
+Distroy it when close
+https://forum.qt.io/topic/7489/solved-how-to-destroy-widget-when-close-qdockwidget/10
